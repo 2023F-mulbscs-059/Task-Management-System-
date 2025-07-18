@@ -1,0 +1,14 @@
+{
+  "name": "task-management-system",
+  "version": "1.0.0",
+  "description": "Task Management System",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd Backend && npm run dev",
+    "client": "cd Client && npm run dev",
+    "install-all": "npm install && cd Backend && npm install && cd ../Client && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
