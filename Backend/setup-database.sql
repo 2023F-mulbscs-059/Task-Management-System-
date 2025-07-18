@@ -2,8 +2,8 @@
 -- Run this script in your MySQL server to set up the database
 
 -- Create database
-CREATE DATABASE IF NOT EXISTS task_management;
-USE task_management;
+CREATE DATABASE IF NOT EXISTS task_manager;
+USE task_manager;
 
 -- Create tasks table
 CREATE TABLE IF NOT EXISTS tasks (
