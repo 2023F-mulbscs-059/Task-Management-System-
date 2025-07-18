@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System - Visual Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: rgba(255, 255, 255, 0.87);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        .task-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-form h2 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #f44336, #da190b);
+            color: white;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .tasks-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .tasks-section h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: left;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .task-item h3 {
+            color: white;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .task-item p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .task-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .status-in-progress {
+            background: rgba(0, 123, 255, 0.3);
+            color: #007bff;
+            border: 1px solid #007bff;
+        }
+
+        .status-completed {
+            background: rgba(40, 167, 69, 0.3);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .task-actions select {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .task-meta {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            padding: 2rem;
+        }
+
+        .no-tasks {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            padding: 2rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .task-form,
+            .tasks-section {
+                padding: 1rem;
+            }
+            
+            .task-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Database connection indicator */
+        .db-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(40, 167, 69, 0.3);
+            color: #28a745;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #28a745;
+            backdrop-filter: blur(10px);
+        }
+
+        .api-status {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: rgba(0, 123, 255, 0.3);
+            color: #007bff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid #007bff;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Indicators -->
+    <div class="db-status">🗄️ Database: Connected</div>
+    <div class="api-status">🔗 API: Active</div>
+
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>Task Management System</h1>
+            <p>Organize your tasks efficiently</p>
+            <div class="stats">
+                <span><span class="status-indicator">📋</span>Pending: 2</span>
+                <span><span class="status-indicator">🔄</span>In Progress: 1</span>
+                <span><span class="status-indicator">✅</span>Completed: 2</span>
+            </div>
+        </div>
+
+        <!-- Add Task Form -->
+        <div class="task-form">
+            <h2>Add New Task</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Task Name *</label>
+                    <input type="text" id="name" name="name" placeholder="Enter task name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" placeholder="Enter task description" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="status">
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </form>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="tasks-section">
+            <h2>Your Tasks (5)</h2>
+            
+            <!-- Task 1 - Completed -->
+            <div class="task-item">
+                <h3>Setup Project</h3>
+                <p>Initialize the task management system</p>
+                <div class="task-status status-completed">✅ completed</div>
+                <div class="task-meta">Created: Jul 18, 2025, 11:40 AM</div>
+                <div class="task-actions">
+                    <select>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed" selected>Completed</option>
+                    </select>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+
+            <!-- Task 2 - Completed -->
+            <div class="task-item">
+                <h3>Create Database</h3>
+                <p>Set up MySQL database with proper tables</p>
+                <div class="task-status status-completed">✅ completed</div>
+                <div class="task-meta">Created: Jul 18, 2025, 11:40 AM</div>
+                <div class="task-actions">
+                    <select>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed" selected>Completed</option>
+                    </select>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+
+            <!-- Task 3 - In Progress -->
+            <div class="task-item">
+                <h3>Build API</h3>
+                <p>Create RESTful API endpoints</p>
+                <div class="task-status status-in-progress">🔄 in-progress</div>
+                <div class="task-meta">Created: Jul 18, 2025, 11:40 AM</div>
+                <div class="task-actions">
+                    <select>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress" selected>In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+
+            <!-- Task 4 - Pending -->
+            <div class="task-item">
+                <h3>Frontend Development</h3>
+                <p>Build React frontend with Vite</p>
+                <div class="task-status status-pending">📋 pending</div>
+                <div class="task-meta">Created: Jul 18, 2025, 11:40 AM</div>
+                <div class="task-actions">
+                    <select>
+                        <option value="pending" selected>Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+
+            <!-- Task 5 - Pending -->
+            <div class="task-item">
+                <h3>Testing</h3>
+                <p>Test all functionality</p>
+                <div class="task-status status-pending">📋 pending</div>
+                <div class="task-meta">Created: Jul 18, 2025, 11:40 AM</div>
+                <div class="task-actions">
+                    <select>
+                        <option value="pending" selected>Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects
+            const taskItems = document.querySelectorAll('.task-item');
+            taskItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add form submission handler
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Task would be added to database!\n\nThis is a preview - the actual app connects to MySQL.');
+            });
+
+            // Add delete button handlers
+            const deleteButtons = document.querySelectorAll('.btn-danger');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this task?')) {
+                        alert('Task would be deleted from database!\n\nThis is a preview - the actual app connects to MySQL.');
+                    }
+                });
+            });
+
+            // Add status change handlers
+            const statusSelects = document.querySelectorAll('.task-actions select');
+            statusSelects.forEach(select => {
+                select.addEventListener('change', function() {
+                    alert('Task status would be updated in database!\n\nThis is a preview - the actual app connects to MySQL.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
